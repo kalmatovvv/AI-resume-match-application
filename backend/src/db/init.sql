@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS companies (
     linkedin VARCHAR(500),
     description TEXT,
     embedding_text TEXT,
-    embedding vector(1536) NOT NULL, -- Amazon Titan v2 embeddings (1536 dimensions)
+    embedding vector(1024) NOT NULL, -- Amazon Titan v2 embeddings (1024 dimensions)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

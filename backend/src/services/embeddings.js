@@ -30,7 +30,7 @@ if (process.env.AWS_REGION) {
  */
 async function generateEmbedding(text) {
   const provider = process.env.EMBEDDING_PROVIDER || 'bedrock';
-  const EXPECTED_DIMENSIONS = 1536; // Titan v2 dimensions
+  const EXPECTED_DIMENSIONS = 1024; // Titan v2 dimensions (default: 1024)
   
   let embedding;
   
@@ -96,9 +96,9 @@ async function generateBedrockEmbedding(text) {
     throw new Error('Bedrock client not initialized. Set AWS_REGION environment variable.');
   }
 
-  // CRITICAL: Always use Titan v2 (1536 dimensions)
+  // CRITICAL: Always use Titan v2 (1024 dimensions by default)
   const modelId = 'amazon.titan-embed-text-v2:0';
-  const EXPECTED_DIMENSIONS = 1536;
+  const EXPECTED_DIMENSIONS = 1024;
   
   // Prepare input - Note: This structure works for Titan. 
   // If using strictly "Nova", the payload keys might differ.
@@ -107,7 +107,8 @@ async function generateBedrockEmbedding(text) {
     contentType: 'application/json',
     accept: 'application/json',
     body: JSON.stringify({
-      inputText: text
+      inputText: text,
+      dimensions: 1024 // Explicitly request 1024 dimensions for Titan v2
     })
   };
 

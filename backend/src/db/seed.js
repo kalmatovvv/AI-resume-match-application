@@ -87,11 +87,11 @@ async function seedDatabase() {
           );
         }
         
-        // Generate embedding using Titan v2 (1536 dimensions)
+        // Generate embedding using Titan v2 (1024 dimensions)
         const embedding = await generateEmbedding(embeddingText);
         
         // CRITICAL: Validate embedding dimensions before inserting
-        const EXPECTED_DIMENSIONS = 1536;
+        const EXPECTED_DIMENSIONS = 1024;
         if (!embedding || !Array.isArray(embedding)) {
           throw new Error(
             `Invalid embedding for ${company.company_name}: embedding is not an array`

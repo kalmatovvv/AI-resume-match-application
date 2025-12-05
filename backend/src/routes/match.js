@@ -30,7 +30,14 @@ const upload = multer({
 
 /**
  * POST /api/match
- * Upload resume, generate embedding, and return top 10 matching companies
+ * Upload resume, generate embedding, and return top 100 matching companies
+ * Supports optional filters via multipart field "filters" (JSON string):
+ * {
+ *   "industry": string[],
+ *   "location": string[],
+ *   "funding_stage": string[],
+ *   "min_similarity": number
+ * }
  */
 router.post('/', upload.single('resume'), async (req, res) => {
   try {
@@ -39,6 +46,16 @@ router.post('/', upload.single('resume'), async (req, res) => {
     }
 
     const { buffer, mimetype } = req.file;
+
+    // Optional filters passed as JSON string in multipart body
+    let filters = {};
+    if (req.body && req.body.filters) {
+      try {
+        filters = JSON.parse(req.body.filters);
+      } catch {
+        return res.status(400).json({ error: 'Invalid filters JSON' });
+      }
+    }
     
     // Step 1: Extract text from resume
     console.log('Extracting text from resume...');
@@ -56,14 +73,19 @@ router.post('/', upload.single('resume'), async (req, res) => {
       return res.status(500).json({ error: 'Failed to generate embedding' });
     }
 
-    // Step 3: Search for top 100 matching companies
-    console.log('Searching for matching companies...');
-    const topMatches = await vectorSearch(resumeEmbedding, 100);
+    // Step 3: Search for matching companies with optional filters
+    // Limit to 3 results for unauthenticated users, 100 for authenticated
+    const isAuthenticated = !!req.user;
+    const limit = isAuthenticated ? 100 : 3;
+    console.log(`Searching for matching companies (limit: ${limit}, authenticated: ${isAuthenticated})...`);
+    const topMatches = await vectorSearch(resumeEmbedding, limit, filters);
     
     res.json({
       success: true,
       matches: topMatches,
-      count: topMatches.length
+      count: topMatches.length,
+      authenticated: isAuthenticated,
+      limit: limit
     });
   } catch (error) {
     console.error('Match error:', error);
@@ -77,10 +99,15 @@ router.post('/', upload.single('resume'), async (req, res) => {
 /**
  * POST /api/match/text
  * Match using plain text (for testing)
+ * Body:
+ * {
+ *   "text": string,
+ *   "filters"?: { ...same as /api/match... }
+ * }
  */
 router.post('/text', async (req, res) => {
   try {
-    const { text } = req.body;
+    const { text, filters = {} } = req.body || {};
     
     if (!text || text.trim().length === 0) {
       return res.status(400).json({ error: 'No text provided' });
@@ -93,13 +120,18 @@ router.post('/text', async (req, res) => {
       return res.status(500).json({ error: 'Failed to generate embedding' });
     }
 
-    // Search for matches
-    const topMatches = await vectorSearch(textEmbedding, 100);
+    // Search for matches with optional filters
+    // Limit to 3 results for unauthenticated users, 100 for authenticated
+    const isAuthenticated = !!req.user;
+    const limit = isAuthenticated ? 100 : 3;
+    const topMatches = await vectorSearch(textEmbedding, limit, filters);
     
     res.json({
       success: true,
       matches: topMatches,
-      count: topMatches.length
+      count: topMatches.length,
+      authenticated: isAuthenticated,
+      limit: limit
     });
   } catch (error) {
     console.error('Match error:', error);

@@ -1,5 +1,5 @@
 -- ============================================================
--- RESET COMPANIES TABLE FOR TITAN V2 (1536 DIMENSIONS)
+-- RESET COMPANIES TABLE FOR TITAN V2 (1024 DIMENSIONS)
 -- ============================================================
 -- Run this SQL script to:
 -- 1. Truncate the companies table
@@ -12,7 +12,7 @@ TRUNCATE TABLE companies RESTART IDENTITY;
 -- Step 2: Drop the existing index
 DROP INDEX IF EXISTS companies_embedding_idx;
 
--- Step 3: Recreate the IVFFlat index for 1536-dimensional vectors
+-- Step 3: Recreate the IVFFlat index for 1024-dimensional vectors
 -- Note: lists parameter should be ~sqrt(total_rows) for optimal performance
 -- Adjust lists value based on your expected data size
 CREATE INDEX companies_embedding_idx 
