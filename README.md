@@ -59,7 +59,7 @@ https://github.com/user-attachments/assets/659bc10c-b3fc-43c0-a0bf-43652252f812
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/yourusername/ai-resume-match.git
+    git clone https://github.com/kalmatovvv/ai-resume-match.git
     ```
 
 2.  **Environment Setup**
