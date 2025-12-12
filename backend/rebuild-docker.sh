@@ -14,3 +14,7 @@ echo "Checking logs..."
 docker-compose logs -f backend
 
 
+
+
+
+

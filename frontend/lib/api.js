@@ -1,0 +1,15 @@
+import axios from 'axios';
+
+const baseURL = process.env.BACKEND_API_URL || import.meta.env.VITE_BACKEND_API_URL || '';
+
+export const api = axios.create({
+  baseURL,
+  withCredentials: true
+});
+
+
+
+
+
+
+

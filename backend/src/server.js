@@ -6,7 +6,7 @@ const uploadRoutes = require('./routes/upload');
 const matchRoutes = require('./routes/match');
 const rewriteResumeRoutes = require('./routes/rewriteResume');
 const coverLetterRoutes = require('./routes/coverLetter');
-const { verifyJwt, optionalJwt } = require('./auth/verifyJwt');
+const { authMiddleware, optionalAuthMiddleware } = require('./middlewares/auth');
 
 dotenv.config();
 
@@ -32,10 +32,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/upload', uploadRoutes);
 // Match route uses optional JWT - allows unauthenticated access (limited to 3 results)
 // but verifies token if present (allows 100 results)
-app.use('/api/match', optionalJwt, matchRoutes);
+app.use('/api/match', optionalAuthMiddleware, matchRoutes);
 // AI tools require authentication
-app.use('/api/rewrite-resume', verifyJwt, rewriteResumeRoutes);
-app.use('/api/cover-letter', verifyJwt, coverLetterRoutes);
+app.use('/api/rewrite-resume', authMiddleware, rewriteResumeRoutes);
+app.use('/api/cover-letter', authMiddleware, coverLetterRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
