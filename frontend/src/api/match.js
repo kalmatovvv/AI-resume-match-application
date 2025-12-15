@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../../lib/api';
 
 export async function matchResumeFile({ file, token }) {
   const formData = new FormData();
@@ -11,9 +11,8 @@ export async function matchResumeFile({ file, token }) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await axios.post('/api/match', formData, {
-    headers,
-    withCredentials: true
+  const response = await api.post('/match', formData, {
+    headers
   });
 
   return response.data;

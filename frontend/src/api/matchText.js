@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../../lib/api';
 
 export async function matchResumeText({ text, token }) {
   const headers = {
@@ -8,12 +8,11 @@ export async function matchResumeText({ text, token }) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await axios.post(
-    '/api/match/text',
+  const response = await api.post(
+    '/match/text',
     { text },
     {
-      headers,
-      withCredentials: true
+      headers
     }
   );
 
