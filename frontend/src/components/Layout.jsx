@@ -19,20 +19,22 @@ export function Layout({ children, mode, onModeChange }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-950 font-semibold">
-              AI
-            </div>
-            <div>
-              <div className="font-semibold tracking-tight">AI Resume Matcher</div>
-              <div className="text-xs text-slate-400">
-                Find the best-fit startups for your background.
+        <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-950 font-semibold">
+                AI
+              </div>
+              <div>
+                <div className="font-semibold tracking-tight">AI Resume Matcher</div>
+                <div className="text-xs text-slate-400 hidden sm:block">
+                  Find the best-fit startups for your background.
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between w-full md:w-auto gap-4">
             <div className="inline-flex items-center rounded-full bg-slate-900 p-1 border border-slate-800">
               <button
                 type="button"
@@ -60,7 +62,7 @@ export function Layout({ children, mode, onModeChange }) {
 
             {auth.isAuthenticated ? (
               <div className="flex items-center gap-3">
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end hidden sm:flex">
                   <span className="text-xs text-slate-400">Authenticated</span>
                   <span className="text-[10px] text-slate-500 max-w-[100px] truncate">{auth.user?.profile.email}</span>
                 </div>
