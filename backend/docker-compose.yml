@@ -6,7 +6,7 @@ services:
     container_name: resume_match_db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123!
+      POSTGRES_PASSWORD: {YOUR PASSWORD}
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
@@ -27,7 +27,7 @@ services:
       DB_PORT: 5432
       DB_NAME: postgres
       DB_USER: postgres
-      DB_PASSWORD: postgres123!
+      DB_PASSWORD: {YOUR PASSWORD}
 
       # Embedding provider
       EMBEDDING_PROVIDER: bedrock
